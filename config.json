@@ -18,8 +18,8 @@
 	"permissions": [
 
 	],
-	
-	"enable-every-page-hooks-on-system-pages": false,	
+
+	"enable-every-page-hooks-on-system-pages": false,
 
 	"links": {
 		"project": [
@@ -40,9 +40,14 @@
 
 	"project-settings": [
 		{
+			"key": "record-name-field",
+			"type": "field-list",
+			"name": "Field containing record ID"
+		},
+		{
 			"key":"matching-fields",
 			"type":"field-list",
-			"name": "Fields to match records",
+			"name": "Other Fields to match records",
 			"repeatable":true
 		}
 	],
