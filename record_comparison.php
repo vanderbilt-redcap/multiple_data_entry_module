@@ -13,25 +13,35 @@ $matchingField = $module->getProjectSetting("record-name-field");
 $secondaryMatchingFields = $module->getProjectSetting("matching-fields");
 
 $recordDetails = $module->getData($project,"");
+$matchedRecords = [];
+$recordsToCompare = [];
+
 
 foreach($recordDetails as $recordId => $details) {
-	$matchingRecords = [];
-	$matchingValue = "";
-	$secondaryValues = [];
-
-	foreach($details as $eventId => $eventDetails) {
-		if($eventDetails[$matchingField] != "") {
-			$matchingValue = $eventDetails[$matchingField];
-		}
-
-		foreach($secondaryMatchingFields as $secondaryField) {
-			if($eventDetails[$secondaryField] != "") {
-				$secondaryValues[$secondaryField] = $eventDetails[$secondaryField];
-			}
-		}
+	if(array_key_exists($recordId,$matchedRecords)) {
+		continue;
 	}
 
-	echo "Record: $matchingValue <Br />";var_dump($secondaryValues);echo "<Br /><br />";
+	$matchingData = $module->findMatchingFields($details);
+
+	$thisMatchingRecords = [];
+
+	foreach($recordDetails as $thisId => $thisDetails) {
+		if($thisId == $recordId || array_key_exists($recordId,$matchedRecords)) {
+			continue;
+		}
+
+		$thisMatchingData = $module->findMatchingFields($thisDetails);
+
+		if($matchedData[0] == $thisMatchingData[0]) {
+			$thisMatchingRecords[] = $thisId;
+			$matchedRecords[$recordId] = 1;
+			$matchedRecords[$thisId] = 1;
+		}
+	}
+	$recordsToCompare[$recordId] = $matchedRecords;
 }
+
+var_dump($recordsToCompare);
 
 require_once \ExternalModules\ExternalModules::getProjectFooterPath();
