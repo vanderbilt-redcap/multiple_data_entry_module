@@ -1,0 +1,64 @@
+{
+	"name": "MultipleDataEntry",
+
+	"namespace": "RedcapAfrica\\MultipleDataEntry",
+
+	"description": "Allows multiple sets of records to be compared and discrepancies to be corrected ",
+
+	"documentation": "README.md",
+
+	"authors": [
+		{
+			"name": "Kyle McGuffin",
+			"email": "kyle.mcguffin@vumc.org",
+			"institution": "Vanderbilt University Medical Center"
+		}
+	],
+
+	"permissions": [
+
+	],
+	
+	"enable-every-page-hooks-on-system-pages": false,	
+
+	"links": {
+		"project": [
+			{
+				"name": "Record Adjudication",
+				"icon": "report",
+				"url": "record_comparison.php"
+			}
+		],
+		"control-center": [
+
+		]
+	},
+
+	"no-auth-pages": [
+
+	],
+
+	"project-settings": [
+		{
+			"key":"matching-fields",
+			"type":"field-list",
+			"name": "Fields to match records",
+			"repeatable":true
+		}
+	],
+
+	"system-settings": [
+
+	],
+
+	"crons": [
+
+	],
+
+	"compatibility": {
+		"php-version-min": "",
+		"php-version-max": "",
+		"redcap-version-min": "",
+		"redcap-version-max": ""
+	}
+}
