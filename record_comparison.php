@@ -64,6 +64,38 @@ foreach($recordsToCompare as $initialRecord => $matchingRecords) {
 	$comparisonData[] = $thisComparisonData;
 }
 
-var_dump($comparisonData);
+$metadata = $module->getMetadata($project);
+$firstField = reset($metadata);
+
+foreach($comparisonData as $dataToCompare) {
+	echo "<table class='table'>
+		<thead>
+			<tr>
+				<th>Field Name</th>";
+
+	$headerData = reset($dataToCompare);
+	foreach($headerData as $recordId) {
+		echo "<th>".$recordId."</th>";
+	}
+
+	echo "</tr>
+		</thead>
+		<tbody>";
+
+	foreach($dataToCompare as $fieldName => $fieldValues) {
+		if($fieldName == $firstField["field_name"]) continue;
+
+		echo "<tr>
+			<td>$fieldName</td>";
+
+		foreach($fieldValues as $thisValue) {
+			echo "<td>$thisValue</td>";
+		}
+		echo "</tr>";
+	}
+
+	echo "</tbody>
+	</table>";
+}
 
 require_once \ExternalModules\ExternalModules::getProjectFooterPath();
