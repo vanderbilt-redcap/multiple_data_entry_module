@@ -51,7 +51,7 @@ foreach($recordsToCompare as $initialRecord => $matchingRecords) {
 
 	$recordIds = array_merge([$initialRecord],$matchingRecords);
 
-	foreach($recordsToCompare as $recordId) {
+	foreach($recordIds as $recordId) {
 		foreach($recordDetails[$recordId] as $eventId => $eventDetails) {
 			foreach($eventDetails as $fieldName => $fieldValue) {
 				if(!array_key_exists($fieldName,$thisComparisonData)) {
