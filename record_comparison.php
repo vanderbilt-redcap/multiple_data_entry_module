@@ -67,8 +67,9 @@ foreach($recordsToCompare as $initialRecord => $matchingRecords) {
 $metadata = $module->getMetadata($project);
 $firstField = reset($metadata);
 
+echo "<form method='POST'>";
 foreach($comparisonData as $dataToCompare) {
-	echo "<table class='table'>
+	echo "<table class='table-bordered'>
 		<thead>
 			<tr>
 				<th>Field Name</th>";
@@ -77,6 +78,7 @@ foreach($comparisonData as $dataToCompare) {
 	foreach($headerData as $recordId) {
 		echo "<th>".$recordId."</th>";
 	}
+	echo "<th>Correct Value</th>";
 
 	echo "</tr>
 		</thead>
@@ -85,17 +87,45 @@ foreach($comparisonData as $dataToCompare) {
 	foreach($dataToCompare as $fieldName => $fieldValues) {
 		if($fieldName == $firstField["field_name"]) continue;
 
+		## Compare data between all records
+		$dataValues = [];
+		foreach($fieldValues as $thisValue) {
+			if(array_key_exists($thisValue,$dataValues)) {
+				$dataValues[$thisValue]++;
+			}
+			else {
+				$dataValues[$thisValue] = 1;
+			}
+		}
+
+		$mostLikelyCount = max($dataValues);
+		$mostLikelyValue = "";
+		foreach($dataValues as $thisValue => $thisCount) {
+			if($thisCount == $mostLikelyCount) {
+				$mostLikelyValue = $thisValue;
+			}
+		}
+
+		$noMatch = false;
+		if($mostLikelyCount == 1) {
+			$noMatch = true;
+		}
+
 		echo "<tr>
-			<td>$fieldName</td>";
+			<td ".($noMatch ? "class='bg-danger'" : "").">$fieldName</td>";
 
 		foreach($fieldValues as $thisValue) {
-			echo "<td>$thisValue</td>";
+			echo "<td ".(($noMatch || $thisValue != $mostLikelyValue) ? "class='bg-danger'" : "class='bg-success'").">$thisValue</td>";
 		}
+
+		echo "<td><input type='text' name='$fieldName' value='".($noMatch ? "" : $mostLikelyValue)."' /></td>";
 		echo "</tr>";
 	}
 
 	echo "</tbody>
 	</table>";
 }
+
+echo "<input type='submit' value='Create Corrected Record' /></form>";
 
 require_once \ExternalModules\ExternalModules::getProjectFooterPath();
